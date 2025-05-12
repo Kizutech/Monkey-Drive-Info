@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Monkey Drive Info</title>
+<link rel="icon" type="image/png" href="MDTLOGO.jpg">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Poppins:wght@400;600&display=swap');
+
+  :root {
+    --bg-color: #000000;
+    --text-color: #eee;
+    --primary-color: #ff7700;
+    --nav-bg: #111;
+    --nav-shadow: #ff770044;
+    --btn-hover-bg: #ff770022;
+    --link-color: #ff7700;
+    --link-hover-shadow: #ff7700ff;
+  }
+  body.light-mode {
+    --bg-color: #f8f8f8;
+    --text-color: #222222;
+    --primary-color: #ff7700;
+    --nav-bg: #ffffff;
+    --nav-shadow: #ff770044;
+    --btn-hover-bg: #ff770022;
+    --link-color: #ff7700;
+    --link-hover-shadow: #ff7700ff;
+  }
+
+  * {
+    margin: 0; padding: 0; box-sizing: border-box;
+  }
+  body, html {
+    height: 100%;
+    background: var(--bg-color);
+    color: var(--text-color);
+    font-family: 'Poppins', sans-serif;
+    overflow-y: auto;
+    transition: background-color 0.6s ease, color 0.6s ease;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    min-height: 100vh;
+    padding: 6rem 2rem 2rem 2rem;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+  }
+
+  nav {
+    position: fixed;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 900px;
+    max-width: 95%;
+    background: var(--nav-bg);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem 1.5rem;
+    box-shadow: 0 2px 14px var(--nav-shadow);
+    border-radius: 0 0 10px 10px;
+    z-index: 10000;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
+    font-size: 1.8rem;
+    color: var(--primary-color);
+    user-select: none;
+  }
+  .nav-buttons {
+    display: flex;
+    gap: 20px;
+  }
+  nav button.nav-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-color);
+    font-weight: 600;
+    font-size: 1.25rem;
+    font-family: 'Orbitron', sans-serif;
+    cursor: pointer;
+    padding: 0.45rem 1.2rem;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+    border-radius: 6px;
+    white-space: nowrap;
+  }
+  nav button.nav-btn:hover,
+  nav button.nav-btn.active {
+    color: var(--primary-color);
+    text-shadow: 0 0 12px var(--primary-color)cc, 0 0 24px var(--primary-color)ff;
+    outline: none;
+  }
+  nav button.nav-btn:focus {
+    outline: none;
+  }
+  #mode-toggle-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 22px;
+  }
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 52px;
+    height: 28px;
+  }
+  .switch input {
+    opacity: 0;
+    width: 0; height: 0;
+  }
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 28px;
+  }
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 24px;
+    width: 24px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+  }
+  input:checked + .slider {
+    background-color: var(--primary-color);
+  }
+  input:checked + .slider:before {
+    transform: translateX(24px);
+  }
+  input:focus + .slider {
+    box-shadow: 0 0 4px var(--primary-color);
+  }
+
+  main {
+    flex-grow: 1;
+    margin-top: 0;
+    background: transparent;
+  }
+
+  section {
+    opacity: 0;
+    visibility: hidden;
+    height: 0;
+    overflow: hidden;
+    transition: opacity 0.6s ease, visibility 0.6s ease, height 0.6s ease;
+  }
+  section.active {
+    opacity: 1;
+    visibility: visible;
+    height: auto;
+    overflow: visible;
+  }
+
+  #home {
+    text-align: center;
+    margin-top: 1rem;
+  }
+  #home .welcome-msg {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 2rem;
+    color: var(--primary-color);
+    font-family: 'Orbitron', sans-serif;
+  }
+
+  /* Sports Cars subsection inside home */
+  #home .sports-cars-section {
+    margin-top: 3rem;
+    max-width: 760px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+  }
+  #home .sports-cars-section h2 {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+  }
+  #home .sports-cars-section img {
+    width: 100%;
+    max-width: 760px;
+    border-radius: 12px;
+    box-shadow: 0 0 20px var(--primary-color);
+    margin-bottom: 1.5rem;
+  }
+  #home .sports-cars-section p {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    color: var(--text-color);
+    margin-bottom: 1.5rem;
+  }
+  #home .sports-cars-section a.youtube-link {
+    display: inline-block;
+    background-color: var(--primary-color);
+    color: var(--bg-color);
+    font-weight: 700;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.2rem;
+    padding: 12px 24px;
+    text-decoration: none;
+    border-radius: 8px;
+    box-shadow: 0 0 12px var(--primary-color);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    user-select: none;
+  }
+  #home .sports-cars-section a.youtube-link:hover {
+    background-color: #cc6600;
+    box-shadow: 0 0 20px #cc6600;
+  }
+
+  #videos {
+    max-width: 760px;
+    margin: 1rem auto 0 auto;
+  }
+  #videos h3 {
+    font-family: 'Orbitron', sans-serif;
+    color: var(--primary-color);
+    font-size: 1.8rem;
+    margin-bottom: 0.7rem;
+    margin-top: 1.2rem;
+  }
+  #videos iframe {
+    width: 100%;
+    height: 450px;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 0 14px var(--nav-shadow);
+  }
+  #video-info {
+    margin-top: 0.8rem;
+    background: var(--nav-bg);
+    padding: 1rem 1.2rem;
+    border-radius: 8px;
+    box-shadow: 0 0 12px var(--nav-shadow);
+    color: var(--text-color);
+    font-size: 1rem;
+    font-family: 'Poppins', sans-serif;
+    min-height: 4.2rem;
+  }
+  #about {
+    color: var(--text-color);
+    font-size: 1.05rem;
+    line-height: 1.6;
+    max-width: 760px;
+    margin: 1rem auto 0 auto;
+  }
+  #about h2 {
+    font-family: 'Orbitron', sans-serif;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    font-size: 2rem;
+  }
+  #about p {
+    margin-bottom: 1.3rem;
+  }
+  #about a {
+    color: var(--link-color);
+    text-decoration: none;
+    font-weight: 600;
+    transition: text-shadow 0.3s ease;
+  }
+  #about a:hover {
+    text-shadow: 0 0 14px var(--link-hover-shadow);
+  }
+
+  #intro-screen {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    user-select: none;
+    color: white;
+  }
+  #intro-title {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 900;
+    font-size: 6rem;
+    color: white;
+    animation: introGlowPulse 3s ease-in-out forwards;
+    text-shadow:
+      0 0 10px white,
+      0 0 40px white,
+      0 0 60px white;
+    filter: drop-shadow(0 0 10px white);
+  }
+  @keyframes introGlowPulse {
+    0%, 100% {
+      text-shadow:
+        0 0 10px white,
+        0 0 40px white,
+        0 0 60px white;
+      opacity: 1;
+    }
+    50% {
+      text-shadow:
+        0 0 30px white,
+        0 0 60px white,
+        0 0 90px white;
+      opacity: 0.8;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div id="intro-screen" role="alert" aria-live="assertive" aria-label="Website Intro Animation">
+  <div id="intro-title">MDT Info</div>
+</div>
+
+<div class="container" aria-hidden="true">
+  <nav>
+    Monkey Drive Info
+    <div class="nav-buttons" role="navigation" aria-label="Primary navigation">
+      <button class="nav-btn active" data-target="home" aria-label="Go to Home section">Home</button>
+      <button class="nav-btn" data-target="videos" aria-label="Go to Videos section">Videos</button>
+      <button class="nav-btn" data-target="about" aria-label="Go to About Us section">About Us</button>
+    </div>
+    <div id="mode-toggle-container">
+      <label class="switch" title="Toggle light/dark mode">
+        <input type="checkbox" id="mode-toggle" aria-checked="false" aria-label="Toggle light and dark mode" />
+        <span class="slider"></span>
+      </label>
+    </div>
+  </nav>
+
+  <main>
+    <!-- Home Section -->
+    <section id="home" class="active" tabindex="0" aria-live="polite" aria-label="Home section">
+      <div class="welcome-msg">Welcome to Monkey Drive Info!</div>
+      <p>Welcome to the official website of Monkey Drive Test POV! Get an immersive driver's seat experience with our point-of-view test drives and acceleration tests of the latest car models. Explore detailed insights and videos of the newest vehicles on the market.</p>
+
+      <div class="sports-cars-section" aria-label="Featured Sports Cars information">
+        <h2>Test Drive</h2>
+        <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=760&q=80" alt="Sports Car" />
+        <p>The Monkey Drive Test POV website offers a wide range of test drives, from hatchbacks to sports cars, and an extensive video library for browsing specific models. The website also provides exclusive behind-the-scenes content, updates on upcoming test drive videos, and a connection with the team. The signature point-of-view format provides a realistic experience of driving dynamics, with videos taken on various road types and highlighting key interior features. The website is a trusted source for immersive and informative test drive experiences for car buyers, enthusiasts, and enthusiasts.</p>
+        <a 
+          href="https://www.youtube.com/@MonkeyDriveTestPOV" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          aria-label="Visit BestCarVideosChannel on YouTube"
+          class="youtube-link"
+        >
+          Visit Our YouTube Channel
+        </a>
+      </div>
+    </section>
+
+    <!-- Videos Section -->
+    <section id="videos" tabindex="0" aria-live="polite" aria-label="Videos section">
+      <h3>2024 Model</h3>
+      <iframe id="yt-iframe" src="https://youtu.be/Oj7nQDVaBSw?si=3MtjXlhrt9NvN2DC" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+      <div id="video-info">Welcome to Monkey Drive Info! Watch the latest vedeos on our Playlist. Link down Below!</div>
+      <br>
+      <p><a href="https://youtube.com/playlist?list=PL_D03xYc1NNda64a0fLTjamj3_pFwMmIQ&si=sv-rNiQq1ct1yzK0" target="_blank" rel="noopener noreferrer" aria-label="Visit our YouTube Playlist">2024 Model Playlist</a></p>
+      <h3>2025 Model</h3>
+      <iframe id="yt-iframe" src="https://youtu.be/W44Z1f4kxTs?si=Tj-ht1UyPBuWed6K" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+      <div id="video-info">Welcome to Monkey Drive Info! Watch the latest vedeos on our Playlist. Link down Below!</div>
+      <br>
+      <p><a href="https://youtube.com/playlist?list=PL_D03xYc1NNfmrQIdHPfq3Hjsv1Qg6SyR&si=HbAn9Zu2OfSuQTvP" target="_blank" rel="noopener noreferrer" aria-label="Visit our YouTube Playlist">2025 Model Playlist</a></p>
+      <h3>Comparison Video</h3>
+      <iframe id="yt-iframe" src="https://youtu.be/bPgEQV0zLdg?si=uYSTXcOT0ZDxWlVC" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+      <div id="video-info">Welcome to Monkey Drive Info! Watch the latest vedeos on our Playlist. Link down Below!</div>
+      <br>
+      <p><a href="https://youtube.com/playlist?list=PL_D03xYc1NNd4xvX5hpus4D0ov4ZaSgtU&si=L7AbjRStjOyD3mT3" target="_blank" rel="noopener noreferrer" aria-label="Visit our YouTube Playlist">Comparison Video Playlist</a></p>
+      </p>
+    </section>
+
+    <!-- About Us Section -->
+    <section id="about" tabindex="0" aria-live="polite" aria-label="About Us section">
+      <h2>About Us</h2>
+      <p>Experience the latest cars from the driver's seat! "Monkey Drive Test POV" brings you immersive point-of-view test drives and acceleration tests of new vehicles, featuring models.</p>
+      <p>Check out our YouTube channel for exclusive content and the latest videos:</p>
+      <p><a href="https://www.youtube.com/@MonkeyDriveTestPOV" target="_blank" rel="noopener noreferrer" aria-label="Visit our YouTube channel">Monkey Drive Test POV</a></p>
+      <br>
+      <p>2nd Channel</p>
+      <p><a href="https://www.youtube.com/@TheDrivePOVShorts" target="_blank" rel="noopener noreferrer" aria-label="Visit our YouTube channel">The Drive POV Shorts</a></p>
+    </section>
+  </main>
+</div>
+
+<script>
+  const intro = document.getElementById('intro-screen');
+  const container = document.querySelector('.container');
+  const nav = document.querySelector('nav');
+
+  nav.style.display = 'none'; 
+
+  setTimeout(() => {
+    intro.style.opacity = 0;
+    intro.style.transition = 'opacity 1s ease';
+    intro.addEventListener('transitionend', () => {
+      intro.style.display = 'none';
+      container.style.display = 'flex';
+      container.setAttribute('aria-hidden', 'false');
+      nav.style.display = 'flex'; 
+      document.body.style.overflow = 'auto';
+    });
+  }, 3000);
+
+  const navButtons = document.querySelectorAll('nav .nav-btn');
+  const sections = document.querySelectorAll('main section');
+
+  navButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      if(btn.classList.contains('active')) return;
+
+      navButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const targetId = btn.getAttribute('data-target');
+      sections.forEach(sec => {
+        if(sec.id === targetId){
+          sec.classList.add('active');
+        } else {
+          sec.classList.remove('active');
+        }
+      });
+    });
+  });
+
+  const modeToggle = document.getElementById('mode-toggle');
+  const body = document.body;
+
+  if(localStorage.getItem('theme') === 'light'){
+    body.classList.add('light-mode');
+    modeToggle.checked = true;
+    modeToggle.setAttribute('aria-checked', 'true');
+  }
+
+  modeToggle.addEventListener('change', () => {
+    if(modeToggle.checked){
+      body.classList.add('light-mode');
+      modeToggle.setAttribute('aria-checked', 'true');
+      localStorage.setItem('theme', 'light');
+    } else {
+      body.classList.remove('light-mode');
+      modeToggle.setAttribute('aria-checked', 'false');
+      localStorage.setItem('theme', 'dark');
+    }
+  });
+</script>
+
+</body>
+</html>
