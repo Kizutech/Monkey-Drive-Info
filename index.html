@@ -189,13 +189,6 @@
     color: var(--primary-color);
     margin-bottom: 1rem;
   }
-  #home .sports-cars-section img {
-    width: 100%;
-    max-width: 760px;
-    border-radius: 12px;
-    box-shadow: 0 0 20px var(--primary-color);
-    margin-bottom: 1.5rem;
-  }
   #home .sports-cars-section p {
     font-size: 1.2rem;
     line-height: 1.6;
@@ -232,23 +225,20 @@
     margin-bottom: 0.7rem;
     margin-top: 1.2rem;
   }
-  #videos iframe {
+  .video-item {
+    margin: 1.5rem 0;
+    text-align: center;
+  }
+  .video-item img {
     width: 100%;
-    height: 450px;
-    border: none;
+    max-width: 760px;
     border-radius: 10px;
     box-shadow: 0 0 14px var(--nav-shadow);
   }
-  #video-info {
-    margin-top: 0.8rem;
-    background: var(--nav-bg);
-    padding: 1rem 1.2rem;
-    border-radius: 8px;
-    box-shadow: 0 0 12px var(--nav-shadow);
+  .video-description {
+    margin-top: 0.5rem;
     color: var(--text-color);
     font-size: 1rem;
-    font-family: 'Poppins', sans-serif;
-    min-height: 4.2rem;
   }
   #about {
     color: var(--text-color);
@@ -273,6 +263,17 @@
     transition: text-shadow 0.3s ease;
   }
   #about a:hover {
+    text-shadow: 0 0 14px var(--link-hover-shadow);
+  }
+
+  /* New styles for playlist link animation */
+  .playlist-link {
+    color: var(--link-color);
+    text-decoration: none;
+    font-weight: 600;
+    transition: text-shadow 0.3s ease;
+  }
+  .playlist-link:hover {
     text-shadow: 0 0 14px var(--link-hover-shadow);
   }
 
@@ -315,9 +316,22 @@
       opacity: 0.8;
     }
   }
+
+  /* Settings icon styles */
+  .settings-icon {
+    cursor: pointer;
+    margin-left: 20px;
+    font-size: 1.5rem;
+    color: var(--text-color);
+  }
 </style>
 </head>
 <body>
+
+<audio id="background-music" loop autoplay>
+  <source src="Sport Game Rock by MOKKA [No Copyright Music]  Fast Car.mp3" type="audio/mpeg">
+  Your browser does not support the audio tag.
+</audio>
 
 <div id="intro-screen" role="alert" aria-live="assertive" aria-label="Website Intro Animation">
   <div id="intro-title">MDT Info</div>
@@ -328,7 +342,7 @@
     Monkey Drive Info
     <div class="nav-buttons" role="navigation" aria-label="Primary navigation">
       <button class="nav-btn active" data-target="home" aria-label="Go to Home section">Home</button>
-      <button class="nav-btn" data-target="videos" aria-label="Go to Videos section">Videos</button>
+      <button class="nav-btn playlist" data-target="videos" aria-label="Go to Playlist section">Playlist</button>
       <button class="nav-btn" data-target="about" aria-label="Go to About Us section">About Us</button>
     </div>
     <div id="mode-toggle-container">
@@ -336,6 +350,7 @@
         <input type="checkbox" id="mode-toggle" aria-checked="false" aria-label="Toggle light and dark mode" />
         <span class="slider"></span>
       </label>
+      <span class="settings-icon" id="music-toggle" title="Toggle Background Music">🔊</span>
     </div>
   </nav>
 
@@ -347,7 +362,11 @@
 
       <div class="sports-cars-section" aria-label="Featured Sports Cars information">
         <h2>Test Drive</h2>
-        <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=760&q=80" alt="Sports Car" />
+        <!-- Video Embed instead of Image -->
+        <video width="760" controls>
+          <source src="Intro.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
         <p>The Monkey Drive Test POV website offers a wide range of test drives, from hatchbacks to sports cars, and an extensive video library for browsing specific models. The website also provides exclusive behind-the-scenes content, updates on upcoming test drive videos, and a connection with the team. The signature point-of-view format provides a realistic experience of driving dynamics, with videos taken on various road types and highlighting key interior features. The website is a trusted source for immersive and informative test drive experiences for car buyers, enthusiasts, and enthusiasts.</p>
         <a 
           href="https://www.youtube.com/@MonkeyDriveTestPOV" 
@@ -361,24 +380,34 @@
       </div>
     </section>
 
-    <!-- Videos Section -->
+    <!-- Playlist Section -->
     <section id="videos" tabindex="0" aria-live="polite" aria-label="Videos section">
       <h3>2024 Model</h3>
-      <iframe id="yt-iframe" src="https://youtu.be/Oj7nQDVaBSw?si=3MtjXlhrt9NvN2DC" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
-      <div id="video-info">Welcome to Monkey Drive Info! Watch the latest vedeos on our Playlist. Link down Below!</div>
-      <br>
-      <p><a href="https://youtube.com/playlist?list=PL_D03xYc1NNda64a0fLTjamj3_pFwMmIQ&si=sv-rNiQq1ct1yzK0" target="_blank" rel="noopener noreferrer" aria-label="Visit our YouTube Playlist">2024 Model Playlist</a></p>
+      <div class="video-item">
+        <img src="2024.jpg" alt="2024 Model" />
+        <div class="video-description">
+          <p>Watch the latest 2024 model test drive! Click the Link Below!</p>
+          <p><a href="https://youtube.com/playlist?list=PL_D03xYc1NNda64a0fLTjamj3_pFwMmIQ&si=sv-rNiQq1ct1yzK0" target="_blank" rel="noopener noreferrer" aria-label="Visit our YouTube Playlist" class="playlist-link">2024 Model Playlist</a></p>
+        </div>
+      </div>
+
       <h3>2025 Model</h3>
-      <iframe id="yt-iframe" src="https://youtu.be/W44Z1f4kxTs?si=Tj-ht1UyPBuWed6K" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
-      <div id="video-info">Welcome to Monkey Drive Info! Watch the latest vedeos on our Playlist. Link down Below!</div>
-      <br>
-      <p><a href="https://youtube.com/playlist?list=PL_D03xYc1NNfmrQIdHPfq3Hjsv1Qg6SyR&si=HbAn9Zu2OfSuQTvP" target="_blank" rel="noopener noreferrer" aria-label="Visit our YouTube Playlist">2025 Model Playlist</a></p>
+      <div class="video-item">
+        <img src="2025.jpg" alt="2025 Model" />
+        <div class="video-description">
+          <p>Check out the new features of the 2025 model! Click the Link Below!</p>
+          <p><a href="https://youtube.com/playlist?list=PL_D03xYc1NNfmrQIdHPfq3Hjsv1Qg6SyR&si=HbAn9Zu2OfSuQTvP" target="_blank" rel="noopener noreferrer" aria-label="Visit our YouTube Playlist" class="playlist-link">2025 Model Playlist</a></p>
+        </div>
+      </div>
+
       <h3>Comparison Video</h3>
-      <iframe id="yt-iframe" src="https://youtu.be/bPgEQV0zLdg?si=uYSTXcOT0ZDxWlVC" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
-      <div id="video-info">Welcome to Monkey Drive Info! Watch the latest vedeos on our Playlist. Link down Below!</div>
-      <br>
-      <p><a href="https://youtube.com/playlist?list=PL_D03xYc1NNd4xvX5hpus4D0ov4ZaSgtU&si=L7AbjRStjOyD3mT3" target="_blank" rel="noopener noreferrer" aria-label="Visit our YouTube Playlist">Comparison Video Playlist</a></p>
-      </p>
+      <div class="video-item">
+        <img src="Comparison.jpg" alt="Comparison Video" />
+        <div class="video-description">
+          <p>Watch our comparison video to see the differences! Click the Link Below!</p>
+          <p><a href="https://youtube.com/playlist?list=PL_D03xYc1NNd4xvX5hpus4D0ov4ZaSgtU&si=L7AbjRStjOyD3mT3" target="_blank" rel="noopener noreferrer" aria-label="Visit our YouTube Playlist" class="playlist-link">Comparison Video Playlist</a></p>
+        </div>
+      </div>
     </section>
 
     <!-- About Us Section -->
@@ -398,6 +427,8 @@
   const intro = document.getElementById('intro-screen');
   const container = document.querySelector('.container');
   const nav = document.querySelector('nav');
+  const musicToggle = document.getElementById('music-toggle');
+  const backgroundMusic = document.getElementById('background-music');
 
   nav.style.display = 'none'; 
 
@@ -452,6 +483,17 @@
       body.classList.remove('light-mode');
       modeToggle.setAttribute('aria-checked', 'false');
       localStorage.setItem('theme', 'dark');
+    }
+  });
+
+  // Music toggle functionality
+  musicToggle.addEventListener('click', () => {
+    if (backgroundMusic.paused) {
+      backgroundMusic.play();
+      musicToggle.textContent = '🔊'; // Show sound icon
+    } else {
+      backgroundMusic.pause();
+      musicToggle.textContent = '🔇'; // Show mute icon
     }
   });
 </script>
