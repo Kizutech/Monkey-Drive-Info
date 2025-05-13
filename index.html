@@ -317,12 +317,15 @@
     }
   }
 
-  /* Settings icon styles */
-  .settings-icon {
-    cursor: pointer;
-    margin-left: 20px;
-    font-size: 1.5rem;
-    color: var(--text-color);
+  /* Volume control styles */
+  .volume-control {
+    display: none; /* Initially hidden */
+    align-items: center;
+    margin-top: 10px;
+  }
+  .volume-control input[type="range"] {
+    width: 100%;
+    margin: 0 10px;
   }
 </style>
 </head>
@@ -344,6 +347,7 @@
       <button class="nav-btn active" data-target="home" aria-label="Go to Home section">Home</button>
       <button class="nav-btn playlist" data-target="videos" aria-label="Go to Playlist section">Playlist</button>
       <button class="nav-btn" data-target="about" aria-label="Go to About Us section">About Us</button>
+      <button class="nav-btn" id="settings-btn" aria-label="Go to Settings section">⚙</button>
     </div>
     <div id="mode-toggle-container">
       <label class="switch" title="Toggle light/dark mode">
@@ -357,6 +361,7 @@
   <main>
     <!-- Home Section -->
     <section id="home" class="active" tabindex="0" aria-live="polite" aria-label="Home section">
+      <br>
       <div class="welcome-msg">Welcome to Monkey Drive Info!</div>
       <p>Welcome to the official website of Monkey Drive Test POV! Get an immersive driver's seat experience with our point-of-view test drives and acceleration tests of the latest car models. Explore detailed insights and videos of the newest vehicles on the market.</p>
 
@@ -420,6 +425,25 @@
       <p>2nd Channel</p>
       <p><a href="https://www.youtube.com/@TheDrivePOVShorts" target="_blank" rel="noopener noreferrer" aria-label="Visit our YouTube channel">The Drive POV Shorts</a></p>
     </section>
+
+    <!-- Volume Control Section -->
+    <div class="volume-control" id="volume-control">
+      <span>Volume:</span>
+      <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="1" aria-label="Volume Control">
+    </div>
+
+    <!-- Music Selection Section -->
+    <div class="music-selection" id="music-selection" style="display: none;">
+      <br>
+      <h3>Select Background Music</h3>
+      <select id="music-select" aria-label="Select Background Music">
+        <option value="Sport Game Rock by MOKKA [No Copyright Music]  Fast Car.mp3">Fast Car (Default)</option>
+        <option value="Sport Rock Trailer by Infraction [No Copyright Music]  Adrenaline.mp3">Adrenaline</option>
+        <option value="Sport Trap Rock by Infraction [No Copyright Music]  Training Day.mp3">Training Day</option>
+        <option value="Sport Racing Rock by Infraction [No Copyright Music]  No Limits.mp3">No Limits</option>
+        <option value="Sport Rock Action by Infraction [No Copyright Music]  Hard Rave.mp3">Hard Rave</option>
+      </select>
+    </div>
   </main>
 </div>
 
@@ -429,6 +453,11 @@
   const nav = document.querySelector('nav');
   const musicToggle = document.getElementById('music-toggle');
   const backgroundMusic = document.getElementById('background-music');
+  const volumeSlider = document.getElementById('volume-slider');
+  const settingsBtn = document.getElementById('settings-btn');
+  const volumeControl = document.getElementById('volume-control');
+  const musicSelection = document.getElementById('music-selection');
+  const musicSelect = document.getElementById('music-select');
 
   nav.style.display = 'none'; 
 
@@ -462,6 +491,9 @@
           sec.classList.remove('active');
         }
       });
+      // Hide volume control when navigating to other sections
+      volumeControl.style.display = "none";
+      musicSelection.style.display = "none"; // Hide music selection
     });
   });
 
@@ -495,6 +527,33 @@
       backgroundMusic.pause();
       musicToggle.textContent = '🔇'; // Show mute icon
     }
+  });
+
+  // Volume control functionality
+  volumeSlider.addEventListener('input', () => {
+    backgroundMusic.volume = volumeSlider.value;
+  });
+
+  // Show volume control on settings button click
+  settingsBtn.addEventListener('click', () => {
+    if (volumeControl.style.display === "flex") {
+      volumeControl.style.display = "none";
+    } else {
+      volumeControl.style.display = "flex";
+    }
+    // Toggle music selection display
+    if (musicSelection.style.display === "block") {
+      musicSelection.style.display = "none";
+    } else {
+      musicSelection.style.display = "block";
+    }
+  });
+
+  // Change background music based on selection
+  musicSelect.addEventListener('change', () => {
+    const selectedMusic = musicSelect.value;
+    backgroundMusic.src = selectedMusic;
+    backgroundMusic.play();
   });
 </script>
 
