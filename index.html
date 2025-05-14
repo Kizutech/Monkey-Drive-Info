@@ -55,7 +55,7 @@
     position: fixed;
     top: 0; left: 50%;
     transform: translateX(-50%);
-    width: 900px;
+    width: 70%;
     max-width: 95%;
     background: var(--nav-bg);
     display: flex;
@@ -287,11 +287,12 @@
     z-index: 9999;
     user-select: none;
     color: white;
+    text-align: center;
   }
   #intro-title {
     font-family: 'Orbitron', sans-serif;
     font-weight: 900;
-    font-size: 6rem;
+    font-size: 6vw; /* Responsive font size */
     color: white;
     animation: introGlowPulse 3s ease-in-out forwards;
     text-shadow:
@@ -361,14 +362,13 @@
   <main>
     <!-- Home Section -->
     <section id="home" class="active" tabindex="0" aria-live="polite" aria-label="Home section">
-      <br>
       <div class="welcome-msg">Welcome to Monkey Drive Info!</div>
       <p>Welcome to the official website of Monkey Drive Test POV! Get an immersive driver's seat experience with our point-of-view test drives and acceleration tests of the latest car models. Explore detailed insights and videos of the newest vehicles on the market.</p>
 
       <div class="sports-cars-section" aria-label="Featured Sports Cars information">
         <h2>Test Drive</h2>
         <!-- Video Embed instead of Image -->
-        <video width="760" controls>
+        <video width="100%" controls>
           <source src="Intro.mp4" type="video/mp4">
           Your browser does not support the video tag.
         </video>
