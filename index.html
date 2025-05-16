@@ -328,6 +328,73 @@
     width: 100%;
     margin: 0 10px;
   }
+
+  /* Sidebar styles */
+  #sidebar {
+    position: fixed;
+    top: 0;
+    left: -250px; /* Hidden by default */
+    width: 250px;
+    height: 100%;
+    background: var(--nav-bg);
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+    transition: left 0.3s ease;
+    z-index: 10001;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+  }
+  #sidebar.active {
+    left: 0; /* Show sidebar */
+  }
+  #sidebar .close-btn {
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 10px;
+    color: var(--text-color);
+    background: transparent;
+    border: none;
+    align-self: flex-end;
+  }
+  #sidebar .nav-buttons {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+  }
+  #sidebar .nav-buttons button {
+    margin: 5px 0;
+    text-align: left;
+    background: transparent;
+    border: none;
+    color: var(--text-color);
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+  #sidebar .nav-buttons button:hover {
+    color: var(--primary-color);
+  }
+
+  /* Responsive styles */
+  @media (max-width: 768px) {
+    .nav-buttons {
+      display: none; /* Hide nav buttons on small screens */
+    }
+    #sidebar {
+      left: -250px; /* Keep sidebar hidden by default */
+    }
+    nav {
+      display: flex; /* Show main nav on small screens */
+      flex-direction: column; /* Stack items vertically */
+      align-items: center; /* Center items */
+    }
+    #mode-toggle-container {
+      margin-top: 10px; /* Add margin for spacing */
+    }
+    #sidebar-toggle {
+      display: block; /* Show sidebar toggle button */
+    }
+  }
 </style>
 </head>
 <body>
@@ -349,6 +416,7 @@
       <button class="nav-btn playlist" data-target="videos" aria-label="Go to Playlist section">Playlist</button>
       <button class="nav-btn" data-target="about" aria-label="Go to About Us section">About Us</button>
       <button class="nav-btn" id="settings-btn" aria-label="Go to Settings section">⚙</button>
+      <button class="nav-btn" id="sidebar-toggle" aria-label="Toggle Sidebar">☰</button> <!-- Hamburger icon -->
     </div>
     <div id="mode-toggle-container">
       <label class="switch" title="Toggle light/dark mode">
@@ -359,9 +427,26 @@
     </div>
   </nav>
 
+  <div id="sidebar">
+    <button class="close-btn" id="close-sidebar">✖</button>
+    <div class="nav-buttons">
+      <button class="nav-btn" data-target="home" aria-label="Go to Home section">Home</button>
+      <button class="nav-btn playlist" data-target="videos" aria-label="Go to Playlist section">Playlist</button>
+      <button class="nav-btn" data-target="about" aria-label="Go to About Us section">About Us</button>
+      <button class="nav-btn" id="settings-btn-sidebar" aria-label="Go to Settings section">Settings</button>
+      <div id="mode-toggle-container-sidebar">
+        <label class="switch" title="Toggle light/dark mode">
+          <input type="checkbox" id="mode-toggle-sidebar" aria-checked="false" aria-label="Toggle light and dark mode" />
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+  </div>
+
   <main>
     <!-- Home Section -->
     <section id="home" class="active" tabindex="0" aria-live="polite" aria-label="Home section">
+      <br><br>
       <div class="welcome-msg">Welcome to Monkey Drive Info!</div>
       <p>Welcome to the official website of Monkey Drive Test POV! Get an immersive driver's seat experience with our point-of-view test drives and acceleration tests of the latest car models. Explore detailed insights and videos of the newest vehicles on the market.</p>
 
@@ -387,6 +472,7 @@
 
     <!-- Playlist Section -->
     <section id="videos" tabindex="0" aria-live="polite" aria-label="Videos section">
+      <br>
       <h3>2024 Model</h3>
       <div class="video-item">
         <img src="2024.jpg" alt="2024 Model" />
@@ -417,6 +503,7 @@
 
     <!-- About Us Section -->
     <section id="about" tabindex="0" aria-live="polite" aria-label="About Us section">
+      <br>
       <h2>About Us</h2>
       <p>Experience the latest cars from the driver's seat! "Monkey Drive Test POV" brings you immersive point-of-view test drives and acceleration tests of new vehicles, featuring models.</p>
       <p>Check out our YouTube channel for exclusive content and the latest videos:</p>
@@ -428,6 +515,7 @@
 
     <!-- Volume Control Section -->
     <div class="volume-control" id="volume-control">
+      <br><br>
       <span>Volume:</span>
       <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="1" aria-label="Volume Control">
     </div>
@@ -458,6 +546,13 @@
   const volumeControl = document.getElementById('volume-control');
   const musicSelection = document.getElementById('music-selection');
   const musicSelect = document.getElementById('music-select');
+  const sidebarToggle = document.getElementById('sidebar-toggle');
+  const sidebar = document.getElementById('sidebar');
+  const closeSidebar = document.getElementById('close-sidebar');
+  const settingsBtnSidebar = document.getElementById('settings-btn-sidebar');
+  const modeToggle = document.getElementById('mode-toggle');
+  const modeToggleSidebar = document.getElementById('mode-toggle-sidebar');
+  const body = document.body;
 
   nav.style.display = 'none'; 
 
@@ -494,28 +589,37 @@
       // Hide volume control when navigating to other sections
       volumeControl.style.display = "none";
       musicSelection.style.display = "none"; // Hide music selection
+      sidebar.classList.remove('active'); // Close sidebar when navigating
     });
   });
-
-  const modeToggle = document.getElementById('mode-toggle');
-  const body = document.body;
 
   if(localStorage.getItem('theme') === 'light'){
     body.classList.add('light-mode');
     modeToggle.checked = true;
     modeToggle.setAttribute('aria-checked', 'true');
+    modeToggleSidebar.checked = true;
+    modeToggleSidebar.setAttribute('aria-checked', 'true');
   }
 
   modeToggle.addEventListener('change', () => {
     if(modeToggle.checked){
       body.classList.add('light-mode');
       modeToggle.setAttribute('aria-checked', 'true');
+      modeToggleSidebar.checked = true;
+      modeToggleSidebar.setAttribute('aria-checked', 'true');
       localStorage.setItem('theme', 'light');
     } else {
       body.classList.remove('light-mode');
       modeToggle.setAttribute('aria-checked', 'false');
+      modeToggleSidebar.checked = false;
+      modeToggleSidebar.setAttribute('aria-checked', 'false');
       localStorage.setItem('theme', 'dark');
     }
+  });
+
+  modeToggleSidebar.addEventListener('change', () => {
+    modeToggle.checked = modeToggleSidebar.checked; // Sync the main toggle
+    modeToggle.dispatchEvent(new Event('change')); // Trigger the change event
   });
 
   // Music toggle functionality
@@ -555,6 +659,74 @@
     backgroundMusic.src = selectedMusic;
     backgroundMusic.play();
   });
+
+  // Sidebar toggle functionality
+  sidebarToggle.addEventListener('click', () => {
+    sidebar.classList.toggle('active');
+  });
+
+  closeSidebar.addEventListener('click', () => {
+    sidebar.classList.remove('active');
+  });
+
+  // Close sidebar when clicking on sidebar links
+  const sidebarButtons = sidebar.querySelectorAll('.nav-btn');
+  sidebarButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      sidebar.classList.remove('active');
+      navButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const targetId = btn.getAttribute('data-target');
+      sections.forEach(sec => {
+        if(sec.id === targetId){
+          sec.classList.add('active');
+        } else {
+          sec.classList.remove('active');
+        }
+      });
+    });
+  });
+
+  // Settings button in sidebar functionality
+  settingsBtnSidebar.addEventListener('click', () => {
+    if (volumeControl.style.display === "flex") {
+      volumeControl.style.display = "none";
+    } else {
+      volumeControl.style.display = "flex";
+    }
+    // Toggle music selection display
+    if (musicSelection.style.display === "block") {
+      musicSelection.style.display = "none";
+    } else {
+      musicSelection.style.display = "block";
+    }
+    sidebar.classList.remove('active'); // Close sidebar when accessing settings
+  });
+
+  // Swipe detection for opening the sidebar
+  let touchstartX = 0;
+  let touchendX = 0;
+
+  const gestureZone = document.body; // You can change this to a specific element if needed
+
+  gestureZone.addEventListener('touchstart', (event) => {
+    touchstartX = event.changedTouches[0].screenX;
+  });
+
+  gestureZone.addEventListener('touchend', (event) => {
+    touchendX = event.changedTouches[0].screenX;
+    handleGesture();
+  });
+
+  function handleGesture() {
+    if (touchendX > touchstartX + 50) {
+      // Swipe right
+      sidebar.classList.add('active');
+    } else if (touchendX < touchstartX - 50) {
+      // Swipe left
+      sidebar.classList.remove('active');
+    }
+  }
 </script>
 
 </body>
