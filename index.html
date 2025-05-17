@@ -55,7 +55,7 @@
     position: fixed;
     top: 0; left: 50%;
     transform: translateX(-50%);
-    width: 70%;
+    width: 80%;
     max-width: 95%;
     background: var(--nav-bg);
     display: flex;
@@ -586,9 +586,11 @@
           sec.classList.remove('active');
         }
       });
-      // Hide volume control when navigating to other sections
-      volumeControl.style.display = "none";
-      musicSelection.style.display = "none"; // Hide music selection
+      // Hide volume control and music selection when navigating to other sections
+      if (targetId !== 'settings') {
+        volumeControl.style.display = "none";
+        musicSelection.style.display = "none"; // Hide music selection
+      }
       sidebar.classList.remove('active'); // Close sidebar when navigating
     });
   });
@@ -684,6 +686,11 @@
           sec.classList.remove('active');
         }
       });
+      // Hide volume control and music selection when navigating to other sections
+      if (targetId !== 'settings') {
+        volumeControl.style.display = "none";
+        musicSelection.style.display = "none"; // Hide music selection
+      }
     });
   });
 
