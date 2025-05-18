@@ -55,7 +55,7 @@
     position: fixed;
     top: 0; left: 50%;
     transform: translateX(-50%);
-    width: 80%;
+    width: 85%;
     max-width: 95%;
     background: var(--nav-bg);
     display: flex;
@@ -404,6 +404,9 @@
   Your browser does not support the audio tag.
 </audio>
 
+<audio id="button-click-sound" src="clicked.mp3" preload="auto"></audio>
+<audio id="link-click-sound" src="clickedlink.mp3" preload="auto"></audio>
+
 <div id="intro-screen" role="alert" aria-live="assertive" aria-label="Website Intro Animation">
   <div id="intro-title">MDT Info</div>
 </div>
@@ -507,10 +510,10 @@
       <h2>About Us</h2>
       <p>Experience the latest cars from the driver's seat! "Monkey Drive Test POV" brings you immersive point-of-view test drives and acceleration tests of new vehicles, featuring models.</p>
       <p>Check out our YouTube channel for exclusive content and the latest videos:</p>
-      <p><a href="https://www.youtube.com/@MonkeyDriveTestPOV" target="_blank" rel="noopener noreferrer" aria-label="Visit our YouTube channel">Monkey Drive Test POV</a></p>
+      <p><a href="https://www.youtube.com/@MonkeyDriveTestPOV" target="_blank" rel="noopener noreferrer" aria-label="Visit our YouTube channel" class="link-sound">Monkey Drive Test POV</a></p>
       <br>
       <p>2nd Channel</p>
-      <p><a href="https://www.youtube.com/@TheDrivePOVShorts" target="_blank" rel="noopener noreferrer" aria-label="Visit our YouTube channel">The Drive POV Shorts</a></p>
+      <p><a href="https://www.youtube.com/@TheDrivePOVShorts" target="_blank" rel="noopener noreferrer" aria-label="Visit our YouTube channel" class="link-sound">The Drive POV Shorts</a></p>
     </section>
 
     <!-- Volume Control Section -->
@@ -553,6 +556,8 @@
   const modeToggle = document.getElementById('mode-toggle');
   const modeToggleSidebar = document.getElementById('mode-toggle-sidebar');
   const body = document.body;
+  const buttonClickSound = document.getElementById('button-click-sound');
+  const linkClickSound = document.getElementById('link-click-sound');
 
   nav.style.display = 'none'; 
 
@@ -573,6 +578,9 @@
 
   navButtons.forEach(btn => {
     btn.addEventListener('click', () => {
+      buttonClickSound.currentTime = 0; // Reset sound to start
+      buttonClickSound.play(); // Play click sound
+
       if(btn.classList.contains('active')) return;
 
       navButtons.forEach(b => b.classList.remove('active'));
@@ -592,6 +600,15 @@
         musicSelection.style.display = "none"; // Hide music selection
       }
       sidebar.classList.remove('active'); // Close sidebar when navigating
+    });
+  });
+
+  // Add click sound to links
+  const links = document.querySelectorAll('a.link-sound');
+  links.forEach(link => {
+    link.addEventListener('click', () => {
+      linkClickSound.currentTime = 0; // Reset sound to start
+      linkClickSound.play(); // Play link click sound
     });
   });
 
@@ -675,6 +692,9 @@
   const sidebarButtons = sidebar.querySelectorAll('.nav-btn');
   sidebarButtons.forEach(btn => {
     btn.addEventListener('click', () => {
+      buttonClickSound.currentTime = 0; // Reset sound to start
+      buttonClickSound.play(); // Play click sound
+
       sidebar.classList.remove('active');
       navButtons.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
