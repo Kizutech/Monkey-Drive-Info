@@ -406,6 +406,8 @@
 
 <audio id="button-click-sound" src="clicked.mp3" preload="auto"></audio>
 <audio id="link-click-sound" src="clickedlink.mp3" preload="auto"></audio>
+<audio id="button-link-sound" src="clickedlink.mp3" preload="auto"></audio> <!-- New sound for button links -->
+<audio id="mode-toggle-sound" src="soundclick.mp3" preload="auto"></audio> <!-- New sound for mode toggle -->
 
 <div id="intro-screen" role="alert" aria-live="assertive" aria-label="Website Intro Animation">
   <div id="intro-title">MDT Info</div>
@@ -558,6 +560,8 @@
   const body = document.body;
   const buttonClickSound = document.getElementById('button-click-sound');
   const linkClickSound = document.getElementById('link-click-sound');
+  const buttonLinkSound = document.getElementById('button-link-sound'); // New sound for button links
+  const modeToggleSound = document.getElementById('mode-toggle-sound'); // New sound for mode toggle
 
   nav.style.display = 'none'; 
 
@@ -612,6 +616,15 @@
     });
   });
 
+  // Add sound for button links in Home and Playlist
+  const buttonLinks = document.querySelectorAll('.youtube-link, .playlist-link');
+  buttonLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      buttonLinkSound.currentTime = 0; // Reset sound to start
+      buttonLinkSound.play(); // Play button link sound
+    });
+  });
+
   if(localStorage.getItem('theme') === 'light'){
     body.classList.add('light-mode');
     modeToggle.checked = true;
@@ -627,12 +640,16 @@
       modeToggleSidebar.checked = true;
       modeToggleSidebar.setAttribute('aria-checked', 'true');
       localStorage.setItem('theme', 'light');
+      modeToggleSound.currentTime = 0; // Reset sound to start
+      modeToggleSound.play(); // Play mode toggle sound
     } else {
       body.classList.remove('light-mode');
       modeToggle.setAttribute('aria-checked', 'false');
       modeToggleSidebar.checked = false;
       modeToggleSidebar.setAttribute('aria-checked', 'false');
       localStorage.setItem('theme', 'dark');
+      modeToggleSound.currentTime = 0; // Reset sound to start
+      modeToggleSound.play(); // Play mode toggle sound
     }
   });
 
